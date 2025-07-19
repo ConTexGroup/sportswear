@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>CONBELLO TEXTILE – Complete Interactive Catalog</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0f0f0f;
+      --card:#1d1d1d;
+      --accent:#3498db;
+      --text:#f5f5f5;
+      --highlight:#f39c12;
+      --danger:#ff6b6b;
+      --success:#00d2ff;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;font-family:'Poppins',sans-serif;}
+    body{
+      background:var(--bg);
+      color:var(--text);
+      padding:40px 20px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:40px;
+    }
+    .brand{
+      font-size:2.4rem;
+      font-weight:600;
+      letter-spacing:1px;
+      color:#fff;
+    }
+    h2{
+      font-size:1.1rem;
+      font-weight:400;
+      text-align:center;
+      color:#aaa;
+      margin-bottom:30px;
+    }
+    .catalog{
+      width:100%;
+      max-width:1100px;
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+      gap:30px;
+    }
+    .card{
+      background:var(--card);
+      border-radius:16px;
+      overflow:hidden;
+      position:relative;
+      cursor:pointer;
+      transition:transform .3s, box-shadow .3s;
+      box-shadow:0 8px 25px rgba(0,0,0,.45);
+    }
+    .card:hover{
+      transform:translateY(-6px) scale(1.02);
+      box-shadow:0 12px 35px rgba(0,0,0,.65);
+    }
+    .card-header{
+      background:linear-gradient(135deg,#2c2c2c 0%, #1e1e1e 100%);
+      padding:20px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-size:1.4rem;
+      font-weight:600;
+    }
+    .card-header svg{
+      width:36px;
+      height:36px;
+      fill:var(--highlight);
+    }
+    .card-body{
+      padding:20px;
+    }
+    .card-body ul{
+      list-style:none;
+    }
+    .card-body li{
+      margin-bottom:10px;
+    }
+    .card-body a{
+      color:var(--accent);
+      text-decoration:none;
+    }
+    .card-body a:hover{
+      text-decoration:underline;
+    }
+    .features{
+      margin-top:15px;
+      border-left:4px solid var(--accent);
+      padding-left:12px;
+      font-size:.95rem;
+      line-height:1.5;
+    }
+    .features strong{color:var(--highlight);}
+    .footer{margin-top:40px;text-align:center;color:#888;font-size:.9rem;}
+    .footer a{color:var(--accent);}
+
+    /* ---- NEW: middle banner ---- */
+    .banner{
+      width:100%;
+      max-width:1100px;
+      background:linear-gradient(135deg,#667eea 0%, #764ba2 100%);
+      color:#fff;
+      padding:28px 35px;
+      border-radius:16px;
+      font-size:1.05rem;
+      line-height:1.7;
+      box-shadow:0 8px 25px rgba(0,0,0,.45);
+    }
+    .banner p{margin:.6em 0;}
+
+    /* ---- NEW: quality & craftsmanship sections ---- */
+    .section-title{
+      font-size:2rem;
+      font-weight:600;
+      margin:50px 0 25px;
+      text-align:center;
+      color:#fff;
+    }
+    .comparison-grid{
+      width:100%;
+      max-width:1100px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:30px;
+    }
+    .quality-section{
+      background:var(--card);
+      border-radius:16px;
+      padding:30px;
+      box-shadow:0 8px 25px rgba(0,0,0,.45);
+    }
+    .quality-header{
+      display:flex;
+      align-items:center;
+      gap:15px;
+      margin-bottom:25px;
+    }
+    .quality-icon{
+      width:50px;
+      height:50px;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:1.6em;
+      color:#fff;
+    }
+    .low .quality-icon{background:var(--danger);}
+    .high .quality-icon{background:var(--success);}
+    .quality-title{
+      font-size:1.6em;
+      font-weight:bold;
+      color:#fff;
+    }
+    .feature-item{
+      background:#232323;
+      padding:18px;
+      border-left:4px solid;
+      border-radius:8px;
+      margin-bottom:15px;
+      color:#ddd;
+      line-height:1.4;
+    }
+    .low .feature-item{border-left-color:var(--danger);}
+    .high .feature-item{border-left-color:var(--success);}
+    .feature-title{font-weight:bold;margin-bottom:6px;color:#fff;}
+
+    /* ---- craftsmanship ---- */
+    .craft-section{
+      width:100%;
+      max-width:1100px;
+      background:#1d1d1d;
+      border-radius:16px;
+      padding:35px 30px;
+      margin-top:40px;
+      box-shadow:0 8px 25px rgba(0,0,0,.45);
+    }
+    .craft-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+      gap:25px;
+      margin:30px 0;
+    }
+    .craft-card{
+      background:#232323;
+      padding:20px;
+      border-radius:12px;
+      display:flex;
+      align-items:flex-start;
+      gap:15px;
+    }
+    .craft-icon{font-size:2.3em;}
+    .craft-title{font-weight:bold;font-size:1.2em;margin-bottom:6px;color:#fff;}
+    .craft-desc{line-height:1.4;color:#ccc;}
+    .conclusion{
+      background:#232323;
+      padding:25px;
+      border-radius:12px;
+      margin-top:30px;
+      color:#ccc;
+      line-height:1.5;
+    }
+    .conclusion strong{color:var(--highlight);}
+
+    /* ---- cost ---- */
+    .cost-section{
+      width:100%;
+      max-width:1100px;
+      background:#1d1d1d;
+      border-radius:16px;
+      padding:35px 30px;
+      margin-top:40px;
+      box-shadow:0 8px 25px rgba(0,0,0,.45);
+      text-align:center;
+    }
+    .cost-grid{
+      display:flex;
+      justify-content:center;
+      gap:40px;
+      flex-wrap:wrap;
+      margin:25px 0;
+    }
+    .cost-box{
+      background:#232323;
+      padding:25px 40px;
+      border-radius:12px;
+      min-width:220px;
+    }
+    .cost-label{font-size:1.1em;font-weight:bold;color:#fff;}
+    .cost-value{font-size:1.5em;font-weight:bold;margin:8px 0;}
+    .low-cost{color:var(--danger);}
+    .high-cost{color:var(--success);}
+    .summary{font-size:1.3em;font-weight:600;color:#fff;margin-top:20px;}
+  </style>
+</head>
+<body>
+
+  <div class="brand">CONBELLO TEXTILE</div>
+  <h2>Premium Custom Apparel – Made in Turkey</h2>
+
+  <!-- ========================================================= -->
+  <!-- 1. PRODUCT CATALOG (unchanged) -->
+  <!-- ========================================================= -->
+  <div class="catalog">
+    <!-- T-Shirts -->
+    <div class="card">
+      <div class="card-header">
+        <svg viewBox="0 0 24 24"><path d="M12 1c3.9 0 7 3.1 7 7 0 4-2.3 7.4-5.6 8.9L12 21l-1.4-4.1C7.3 15.4 5 12 5 8c0-3.9 3.1-7 7-7zm0 2c-2.8 0-5 2.2-5 5 0 2.9 1.7 5.4 4.1 6.6L12 18.8l1.9-4.2c2.4-1.2 4.1-3.7 4.1-6.6 0-2.8-2.2-5-5-5z"/></svg>
+        T-Shirts
+      </div>
+      <div class="card-body">
+        <ul>
+          <li><a href="https://www.conbello.com/custom-t-shirt-manufacturer" target="_blank">High-Performance T-Shirts</a></li>
+          <li><a href="https://www.conbello.com/Custom-Sportswear-T-shirt-Manufacturer-Turkey" target="_blank">What does a high-quality T-shirt mean?</a></li>
+          <li><a href="https://www.conbello.com/Best-t-shirt-manufacturer-Turkey" target="_blank">Best T-Shirt Manufacturer - Turkey</a></li>
+        </ul>
+        <div class="features">
+          <strong>✨ Why Choose Our T-Shirts?</strong><br/>
+          Eco-friendly OEKO-TEX® fabrics, shrink-resistant & fast worldwide shipping.
+        </div>
+      </div>
+    </div>
+
+    <!-- LEGGINGS -->
+    <div class="card">
+      <div class="card-header">
+        <svg viewBox="0 0 24 24"><path d="M12 1c3.9 0 7 3.1 7 7 0 4-2.3 7.4-5.6 8.9L12 21l-1.4-4.1C7.3 15.4 5 12 5 8c0-3.9 3.1-7 7-7zm0 2c-2.8 0-5 2.2-5 5 0 2.9 1.7 5.4 4.1 6.6L12 18.8l1.9-4.2c2.4-1.2 4.1-3.7 4.1-6.6 0-2.8-2.2-5-5-5z"/></svg>
+        Leggings
+      </div>
+      <div class="card-body">
+        <ul>
+          <li><a href="https://www.conbello.com/custom-wholesale-leggings-manufacturer" target="_blank">What does high-quality leggings mean?</a></li>
+          <li><a href="https://www.conbello.com/High-Quality-Custom-Yoga-Clothes-Manufacturer" target="_blank">Yoga, Walking, and Fitness leggings designs must be produced using different methods.</a></li>
+        </ul>
+        <div class="features">
+          <strong>🔥 Stand-Out Features</strong><br/>
+          4-way stretch, flatlock seams, moisture-wicking & odor-resistant tech.
+        </div>
+      </div>
+    </div>
+
+    <!-- SPORTS BRA -->
+    <div class="card">
+      <div class="card-header">
+        <svg viewBox="0 0 24 24"><path d="M12 1c3.9 0 7 3.1 7 7 0 4-2.3 7.4-5.6 8.9L12 21l-1.4-4.1C7.3 15.4 5 12 5 8c0-3.9 3.1-7 7-7zm0 2c-2.8 0-5 2.2-5 5 0 2.9 1.7 5.4 4.1 6.6L12 18.8l1.9-4.2c2.4-1.2 4.1-3.7 4.1-6.6 0-2.8-2.2-5-5-5z"/></svg>
+        Sports Bra
+      </div>
+      <div class="card-body">
+        <ul>
+          <li><a href="https://www.conbello.com/Turkeycustommanufacturingpolyestersportsbra" target="_blank">For sports bras, fabric type, branding, and sewing technologies are determined based on the design.</a></li>
+        </ul>
+        <div class="features">
+          <strong>🌟 Key Features</strong><br/>
+          Lightweight, breathable, quick-dry polyester blends with full branding options.
+        </div>
+      </div>
+    </div>
+
+    <!-- HOODIES -->
+    <div class="card">
+      <div class="card-header">
+        <svg viewBox="0 0 24 24"><path d="M12 1c3.9 0 7 3.1 7 7 0 4-2.3 7.4-5.6 8.9L12 21l-1.4-4.1C7.3 15.4 5 12 5 8c0-3.9 3.1-7 7-7zm0 2c-2.8 0-5 2.2-5 5 0 2.9 1.7 5.4 4.1 6.6L12 18.8l1.9-4.2c2.4-1.2 4.1-3.7 4.1-6.6 0-2.8-2.2-5-5-5z"/></svg>
+        Hoodies & Sweatshirts
+      </div>
+      <div class="card-body">
+        <ul>
+          <li><a href="https://www.conbello.com/custom-made-streetwear-turkey" target="_blank">What does a high-quality hoodie mean?</a></li>
+          <li><a href="https://www.conbello.com/Custom-Hoodie-manufacturer-Turkey" target="_blank">Hoodie fabric-branding</a></li>
+          <li><a href="https://www.conbello.com/Hoodie-Jogger-Tracksuits-wholesale-manufacturer-Turkey" target="_blank">The importance of quality in tracksuits</a></li>
+        </ul>
+        <div class="features">
+          <strong>🚀 Superior Hoodie Features</strong><br/>
+          Fleece-lined, double-layered hood, reinforced cuffs for all-day comfort.
+        </div>
+      </div>
+    </div>
+
+    <!-- PREMIUM SPORTSWEAR -->
+    <div class="card">
+      <div class="card-header">
+        <svg viewBox="0 0 24 24"><path d="M12 1c3.9 0 7 3.1 7 7 0 4-2.3 7.4-5.6 8.9L12 21l-1.4-4.1C7.3 15.4 5 12 5 8c0-3.9 3.1-7 7-7zm0 2c-2.8 0-5 2.2-5 5 0 2.9 1.7 5.4 4.1 6.6L12 18.8l1.9-4.2c2.4-1.2 4.1-3.7 4.1-6.6 0-2.8-2.2-5-5-5z"/></svg>
+        Premium Sportswear
+      </div>
+      <div class="card-body">
+        <ul>
+          <li><a href="https://www.conbello.com/How-to-Start-a-Fitness-Clothing-Line" target="_blank">What does high-quality sportswear mean?</a></li>
+          <li><a href="https://www.conbello.com/Women-fitness-clothing-manufacturer" target="_blank">Cheap/Low-quality clothing is garbage</a></li>
+          <li><a href="https://www.conbello.com/sportswear-manufacturer" target="_blank">New technologies in sportswear</a></li>
+          <li><a href="https://www.conbello.com/TurkeySportswearManufacturing" target="_blank">Things to consider when manufacturing fitness apparel</a></li>
+          <li><a href="https://www.conbello.com/CustomManufacturerSportswear" target="_blank">What does it mean to differentiate your brand?</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- FITNESS CLOTHING -->
+    <div class="card">
+      <div class="card-header">
+        <svg viewBox="0 0 24 24"><path d="M12 1c3.9 0 7 3.1 7 7 0 4-2.3 7.4-5.6 8.9L12 21l-1.4-4.1C7.3 15.4 5 12 5 8c0-3.9 3.1-7 7-7zm0 2c-2.8 0-5 2.2-5 5 0 2.9 1.7 5.4 4.1 6.6L12 18.8l1.9-4.2c2.4-1.2 4.1-3.7 4.1-6.6 0-2.8-2.2-5-5-5z"/></svg>
+        Fitness Clothing
+      </div>
+      <div class="card-body">
+        <ul>
+          <li><a href="https://www.conbello.com/Private-Label-Fitness-Clothing-Manufacturer" target="_blank">Differences between promotional and premium fitness apparel</a></li>
+          <li><a href="https://www.conbello.com/Clothing-manufacturers-for-small-businesses" target="_blank">Support program for startup brands</a></li>
+        </ul>
+      </div>
+    </div>
+
+  </div><!-- /catalog -->
+
+  <!-- ========================================================= -->
+  <!-- 2. NEW MIDDLE BANNER (labels / ATR / packaging) -->
+  <!-- ========================================================= -->
+  <div class="banner">
+    <p>! All prices include woven fabric labels / transfer-print labels and washing-instruction labels.</p>
+    <p>! All products are delivered in their own special, transparent, reusable, and environmentally friendly packaging (marked with the recycled symbol).</p>
+    <p>! Conbello Textile's manufacturing protocol uses high-quality fabrics with color-fastness, anti-pilling, and color-stabilizing finishes.</p>
+    <p>! Furthermore, thanks to the ATR Certificate we will issue specifically for your company, you will not pay any customs duties in your country (for European Union member states and the UK). The ATR Certificate is issued free of charge by the Conbello Textile accounting department.</p>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- 3. LOW-QUALITY vs HIGH-QUALITY (dark-theme version) -->
+  <!-- ========================================================= -->
+  <div class="section-title">⚖️ Low-Quality vs High-Quality Sportswear</div>
+  <div class="comparison-grid">
+    <div class="quality-section low">
+      <div class="quality-header">
+        <div class="quality-icon">❌</div>
+        <div class="quality-title">Low-Quality Sportswear</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-title">🔄 Recycled Fabrics (sub-par)</div>
+        <div class="feature-desc">Quickly lose shape and stretch, becoming unwearable after a few washes.</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-title">🎨 Chromatic Degradation</div>
+        <div class="feature-desc">Absence of color-fastening finishes causes rapid fading and pigment migration.</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-title">🏷️ Peeling Logos</div>
+        <div class="feature-desc">Prints and logos crack, peel, and wear off after minimal use.</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-title">✂️ Substandard Seam Construction</div>
+        <div class="feature-desc">Negligent stitching causes immediate structural inconsistencies and accelerated garment disintegration.</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-title">⏰ Short Lifespan</div>
+        <div class="feature-desc">Frequent replacements needed, leading to constant shopping.</div>
+      </div>
+    </div>
+
+    <div class="quality-section high">
+      <div class="quality-header">
+        <div class="quality-icon">✅</div>
+        <div class="quality-title">High-Quality Sportswear</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-title">🧵 Premium Fabrics</div>
+        <div class="feature-desc">Maintains shape and elasticity through countless washes and workouts.</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-title">🌈 Advanced Colorfast Technology</div>
+        <div class="feature-desc">Color-fastening & color-stabilizing finishes ensure chromatic stability and pigment retention.</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-title">🏆 Durable Prints</div>
+        <div class="feature-desc">High-quality printing techniques ensure logos and designs last.</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-title">🎯 Precision Seam Engineering</div>
+        <div class="feature-desc">Meticulous stitch formation and reinforced seam construction for longevity.</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-title">♾️ Long-term Value</div>
+        <div class="feature-desc">Years of reliable use with minimal replacement needs.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- 4. ADVANCED CRAFTSMANSHIP (dark-theme version) -->
+  <!-- ========================================================= -->
+  <div class="section-title">🔬 Advanced Craftsmanship Architecture</div>
+  <div class="craft-section">
+    <div class="craft-grid">
+      <div class="craft-card">
+        <div class="craft-icon">📏</div>
+        <div>
+          <div class="craft-title">Stitch Spacing Precision</div>
+          <div class="craft-desc">Calibrated stitch density ensures optimal tension distribution & stress resistance.</div>
+        </div>
+      </div>
+      <div class="craft-card">
+        <div class="craft-icon">🧵</div>
+        <div>
+          <div class="craft-title">Thread Tension Dynamics</div>
+          <div class="craft-desc">Precisely calibrated tension prevents puckering while maintaining seam elasticity.</div>
+        </div>
+      </div>
+      <div class="craft-card">
+        <div class="craft-icon">🔗</div>
+        <div>
+          <div class="craft-title">Thread Selection Engineering</div>
+          <div class="craft-desc">High-performance compounds with superior tensile strength and elongation.</div>
+        </div>
+      </div>
+      <div class="craft-card">
+        <div class="craft-icon">🔥</div>
+        <div>
+          <div class="craft-title">Thermal Finishing Protocols</div>
+          <div class="craft-desc">Advanced heat-setting and steam-pressing for seam consolidation & dimensional stabilization.</div>
+        </div>
+      </div>
+      <div class="craft-card">
+        <div class="craft-icon">🛡️</div>
+        <div>
+          <div class="craft-title">Interfacing Integration</div>
+          <div class="craft-desc">Strategic placement of fusible/non-fusible interfacing to prevent deformation.</div>
+        </div>
+      </div>
+      <div class="craft-card">
+        <div class="craft-icon">⚖️</div>
+        <div>
+          <div class="craft-title">Dimensional Stability Matrix</div>
+          <div class="craft-desc">Comprehensive shape-retention engineering prevents gravitational sag.</div>
+        </div>
+      </div>
+    </div>
+    <div class="conclusion">
+      <strong>Holistic Manufacturing Philosophy:</strong> Superior craftsmanship transcends aesthetics—meticulous component engineering ensures functional longevity and prevents premature deterioration.
+    </div>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- 5. REAL COST COMPARISON (dark-theme version) -->
+  <!-- ========================================================= -->
+  <div class="section-title">💰 The Real Cost Comparison</div>
+  <div class="cost-section">
+    <div class="cost-grid">
+      <div class="cost-box">
+        <div class="cost-label">Low-Quality Approach</div>
+        <div class="cost-value low-cost">$20 × 5 replacements = $100</div>
+        <div style="margin-top:8px;font-size:.9em;color:#ccc;">Replace every 6 months</div>
+      </div>
+      <div class="cost-box">
+        <div class="cost-label">High-Quality Investment</div>
+        <div class="cost-value high-cost">$60 × 1 purchase = $60</div>
+        <div style="margin-top:8px;font-size:.9em;color:#ccc;">Lasts 2-3 years</div>
+      </div>
+    </div>
+    <div class="summary">💡 High-Quality Manufacturing is actually <strong>40 % cheaper</strong>!</div>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- 6. FOOTER -->
+  <!-- ========================================================= -->
+  <div class="footer">
+    <p>🌍 Made in Turkey | Trusted Worldwide</p>
+    <p>📞 <a href="https://www.conbello.com" target="_blank">www.conbello.com</a></p>
+    <p>📍 Istanbul – EU & UK Friendly Logistics</p>
+    <p>All rights reserved by Conbello Textile</p>
+  </div>
+
+</body>
+</html>
